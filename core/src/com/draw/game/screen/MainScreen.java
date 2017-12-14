@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -61,21 +62,19 @@ public class MainScreen implements Screen {
 
     @Override
     public void show() {
-//        DragAndDropActor dadActor = new DragAndDropActor(new Image( new Texture(Gdx.files.internal("bat1.png"))),this, Constants.OBJECT_TYPE_BUILDING);
         Array<TextureRegion> frames = new Array<TextureRegion>();
-        frames.add(new TextureRegion(new Texture(Gdx.files.internal("bat1.png"))));
-        frames.add(new TextureRegion(new Texture(Gdx.files.internal("bat1a.png"))));
-        frames.add(new TextureRegion(new Texture(Gdx.files.internal("bat1b.png"))));
-        frames.add(new TextureRegion(new Texture(Gdx.files.internal("bat1c.png"))));
-        frames.add(new TextureRegion(new Texture(Gdx.files.internal("bat1d.png"))));
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("building/build1.png"))));
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("building/build2.png"))));
+        frames.add(new TextureRegion(new Texture(Gdx.files.internal("building/build2.png"))));
         AnimatedActor animatedActor = new AnimatedActor(0,0,170,320,1,frames, Animation.PlayMode.NORMAL);
         DragAndDropActor dadActor = new DragAndDropActor(animatedActor,this, Constants.OBJECT_TYPE_BUILDING);
-//        dadActor.addIdleAnimation(1f,frames,Animation.PlayMode.LOOP);
+
         stage.addActor(backgroundImage);
         stage.addActor(shadowImg);
         stage.addActor(dadActor);
 
-        //PARTIE DE TEST
+
+        //PARTIE DE TEST: LONG PRESS
        // Array<TextureRegion> frames = new Array<TextureRegion>();
        // frames.add(new TextureRegion(new Texture(Gdx.files.internal("bat1.png"))));
        // frames.add(new TextureRegion(new Texture(Gdx.files.internal("bat1a.png"))));

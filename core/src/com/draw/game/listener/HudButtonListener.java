@@ -76,6 +76,7 @@ public class HudButtonListener extends InputListener {
             cancel();
         }
         this.hud.getPlayScreen().updateTips();
+        hud.getPlayScreen().getShadowImg().setVisible(false);
     }
 
     public void dragStart (InputEvent event, float x, float y, int pointer) {
@@ -103,14 +104,14 @@ public class HudButtonListener extends InputListener {
     public void drag(InputEvent event, float x, float y, int pointer) {
         Gdx.app.log("parentActor", "drag");
         this.parentActor.moveBy(x - this.parentActor.getWidth() / 2, y - this.parentActor.getHeight() / 2);
-        hud.getPlayScreen().getShadowImg().moveBy(x - this.parentActor.getWidth() / 2, 0);
+        hud.getPlayScreen().getShadowImg().setPosition(parentActor.getX(), Constants.GROUND_HEIGHT);
     }
 
     public void dragStop (InputEvent event, float x, float y, int pointer) {
         parentActor.remove();
         DragAndDropActor dadActor = new DragAndDropActor(new Image( new Texture(Gdx.files.internal("bat1.png"))),hud.getPlayScreen(), Constants.OBJECT_TYPE_BUILDING);
         hud.getPlayScreen().getStage().addActor(dadActor);
-        dadActor.getDragGroup().setPosition(hud.getPlayScreen().getShadowImg().getX(), hud.getPlayScreen().getShadowImg().getY());
+        dadActor.getDragGroup().setPosition(hud.getPlayScreen().getShadowImg().getX()- dadActor.getWidth(), hud.getPlayScreen().getShadowImg().getY());
     }
 
     /* If a drag is in progress, no further drag methods will be called until a new drag is started. */

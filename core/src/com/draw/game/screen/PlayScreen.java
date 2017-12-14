@@ -141,10 +141,10 @@ public class PlayScreen extends InputListener implements Screen {
 //		stage.addActor(dadActor9);
 //		stage.addActor(dadActor10);
 //		stage.addActor(dadActor11);
-		AnimatedActor aa = new AnimatedActor(0,0,170,170,1,frames,Animation.PlayMode.NORMAL);
-		stage.addActor(aa);
-		com.draw.game.listener.GameObjectListener gol = new com.draw.game.listener.GameObjectListener(aa);
-		aa.addListener(gol);
+//		AnimatedActor aa = new AnimatedActor(0,0,170,170,1,frames,Animation.PlayMode.NORMAL);
+//		stage.addActor(aa);
+//		com.draw.game.listener.GameObjectListener gol = new com.draw.game.listener.GameObjectListener(aa);
+//		aa.addListener(gol);
 
 		Gdx.input.setInputProcessor( stage );
 	}

@@ -1,7 +1,9 @@
 package com.draw.game;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -31,6 +33,8 @@ public class AnimatedActor extends Actor {
         public void draw (Batch batch, float parentAlpha) {
             super.draw(batch, parentAlpha);
             currentFrame = (TextureRegion) animation.getKeyFrame(deltatime, true);
+            Color color = getColor();
+            batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
             batch.draw(currentFrame,getX(),getY(),getWidth(),getHeight());
         }
 
@@ -73,5 +77,13 @@ public class AnimatedActor extends Actor {
 
     public void setMoveable(boolean moveable) {
         isMoveable = moveable;
+    }
+
+    public TextureRegion getCurrentFrame() {
+        return currentFrame;
+    }
+
+    public void setCurrentFrame(TextureRegion currentFrame) {
+        this.currentFrame = currentFrame;
     }
 }
