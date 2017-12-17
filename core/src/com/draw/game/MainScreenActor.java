@@ -21,35 +21,31 @@ import java.util.Random;
 
 //TODO: clique long = drag & drop
 // TODO tap = suppression avec bouton
-public class DragAndDropActor extends Group {
+public class MainScreenActor extends Group {
 
     // Sprite
-	private Actor dragActor;
-    private Group dragGroup;
+	protected Actor dragActor;
+    protected Group dragGroup;
     private float touchDown_x;
     private float touchDown_y;
     private float dx;
     private float dy;
-    private MainScreen playScreen;
-    private Animation animation;
-    private float deltatime;
-    private TextureRegion currentFrame;
-    private boolean playAnimation = true;
-    private boolean isMoveable = false;
+    protected MainScreen playScreen;
+    protected boolean playAnimation;
 
     // Type d'objet (pour la logique)
     int type;
 
-	public DragAndDropActor(final Actor actor, final MainScreen playScreen, int type) {
+	public MainScreenActor(final Actor actor, final MainScreen playScreen, int type) {
         this.playScreen=playScreen;
         this.type=type;
 		dragActor = actor;
+        playAnimation=true;
         if (actor instanceof Image) {
             debugRandomBuilding();
         }
 
 		dragActor.setOrigin( actor.getWidth()/2, actor.getHeight()/2 );
-        deltatime = 0;
 
 		dragGroup = new Group();
 		dragActor.setWidth( actor.getWidth()/2 );
@@ -61,9 +57,12 @@ public class DragAndDropActor extends Group {
 			final float h = dragActor.getHeight() / 2;
 
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-            Gdx.app.log("down", String.valueOf(x)+"/"+String.valueOf(y));
+             Gdx.app.log("down", String.valueOf(x)+"/"+String.valueOf(y));
+             playAnimation=false;
+
              //Change taille du shadow et on le rend visible
              playScreen.getShadowImg().setSize(dragActor.getWidth(),dragActor.getHeight());
+             playScreen.getShadowImg().setPosition(x + dx, Constants.GROUND_HEIGHT);
              playScreen.getShadowImg().setVisible(true);
 
              //Change aspect visuel
@@ -101,8 +100,11 @@ public class DragAndDropActor extends Group {
                 dragGroup.addAction(Actions.moveTo(playScreen.getShadowImg().getX(),playScreen.getShadowImg().getY(),0.2f));
 
                dx = dragGroup.getX() - touchDown_x;                 // x & y = position du curseur relative a l'acteur
+
                addActorToStage();
+               playAnimation=true;
             }
+
 		});
 		this.addActor(dragGroup);
     }
@@ -114,7 +116,15 @@ public class DragAndDropActor extends Group {
         Gdx.app.log("actorList", String.valueOf(playScreen.getStage().getActors().size));
     }
 
-	void dispose() {
+    @Override
+    public void act(float deltaTime)
+    {
+        if (playAnimation) {
+            super.act(deltaTime);
+        }
+    }
+
+    void dispose() {
 		dragGroup.clear();
 		dragActor = null;
 		dragGroup = null;

@@ -13,8 +13,5 @@ public class DragAndDropManager extends Group {
         this.playScreen=playScreen;
         shadowImg = new Texture(Gdx.files.internal("bat1.png"));
     }
-		public void addShadow() {
-
-    }
 
 }

@@ -11,42 +11,44 @@ import com.badlogic.gdx.utils.Array;
 
 /**
  * Created by Skronak on 09/02/2017.
+ * Gere uniquemnet l'animation
  */
 public class AnimatedActor extends Actor {
 
-        private Animation animation;
-        private float deltatime;
-        private TextureRegion currentFrame;
-        private boolean playAnimation = true;
-        private boolean isMoveable = false;
+    private Animation animation;
+    private float deltatime;
+    private TextureRegion currentFrame;
+    private boolean playAnimation = true;
+    private boolean isMoveable = false;
 
-        public AnimatedActor(int posX, int posY, int width, int height, float animSpeed, Array<TextureRegion> frames, Animation.PlayMode playMode) {
-            deltatime = 0;
-            this.setWidth(width);
-            this.setHeight(height);
-            this.setPosition(posX, posY);
-            animation = new Animation(animSpeed, frames);
-            animation.setPlayMode(playMode);
+    public AnimatedActor(int posX, int posY, int width, int height, float animSpeed, Array<TextureRegion> frames, Animation.PlayMode playMode) {
+        deltatime = 0;
+        this.setWidth(width);
+        this.setHeight(height);
+        this.setPosition(posX, posY);
+        animation = new Animation(animSpeed, frames);
+        animation.setPlayMode(playMode);
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
+        currentFrame = (TextureRegion) animation.getKeyFrame(deltatime, true);
+        Color color = getColor();
+        batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
+        batch.draw(currentFrame, getX(), getY(), getWidth(), getHeight());
+    }
+
+    public void act(float deltaTime) {
+        super.act(deltaTime);
+        deltatime += deltaTime;
+    }
+
+    public void flip() {
+        for (Object textureRegion : animation.getKeyFrames()) {
+            ((TextureRegion) textureRegion).flip(true, false);
         }
-
-        @Override
-        public void draw (Batch batch, float parentAlpha) {
-            super.draw(batch, parentAlpha);
-            currentFrame = (TextureRegion) animation.getKeyFrame(deltatime, true);
-            Color color = getColor();
-            batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
-            batch.draw(currentFrame,getX(),getY(),getWidth(),getHeight());
-        }
-
-        @Override
-        public void act(float deltaTime)
-        {
-            if (playAnimation) {
-                super.act(deltaTime);
-                deltatime += deltaTime;
-            }
-        }
-
+    }
     public Animation getIdleAnimation() {
         return animation;
     }

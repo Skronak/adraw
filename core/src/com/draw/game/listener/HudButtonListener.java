@@ -1,20 +1,14 @@
 package com.draw.game.listener;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.utils.Array;
 import com.draw.game.Constants;
-import com.draw.game.DragAndDropActor;
+import com.draw.game.MainScreenActor;
 import com.draw.game.screen.Hud;
 
 /**
@@ -109,7 +103,7 @@ public class HudButtonListener extends InputListener {
 
     public void dragStop (InputEvent event, float x, float y, int pointer) {
         parentActor.remove();
-        DragAndDropActor dadActor = new DragAndDropActor(new Image( new Texture(Gdx.files.internal("bat1.png"))),hud.getPlayScreen(), Constants.OBJECT_TYPE_BUILDING);
+        MainScreenActor dadActor = new MainScreenActor(new Image( new Texture(Gdx.files.internal("bat1.png"))),hud.getPlayScreen(), Constants.OBJECT_TYPE_BUILDING);
         hud.getPlayScreen().getStage().addActor(dadActor);
         dadActor.getDragGroup().setPosition(hud.getPlayScreen().getShadowImg().getX()- dadActor.getWidth(), hud.getPlayScreen().getShadowImg().getY());
     }

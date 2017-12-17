@@ -7,19 +7,15 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.draw.game.AnimatedActor;
 import com.draw.game.Constants;
-import com.draw.game.DragAndDropActor;
-import com.draw.game.listener.GameObjectGestureListener;
-import com.draw.game.listener.GameObjectListener;
+import com.draw.game.MainScreenActor;
+import com.draw.game.VehiculeActor;
 import com.draw.game.listener.MainInputProcessor;
 import com.draw.game.manager.TipsManager;
 
@@ -66,13 +62,33 @@ public class MainScreen implements Screen {
         frames.add(new TextureRegion(new Texture(Gdx.files.internal("building/build1.png"))));
         frames.add(new TextureRegion(new Texture(Gdx.files.internal("building/build2.png"))));
         frames.add(new TextureRegion(new Texture(Gdx.files.internal("building/build2.png"))));
-        AnimatedActor animatedActor = new AnimatedActor(0,0,170,320,1,frames, Animation.PlayMode.NORMAL);
-        DragAndDropActor dadActor = new DragAndDropActor(animatedActor,this, Constants.OBJECT_TYPE_BUILDING);
+        Array<TextureRegion> truckFrames = new Array<TextureRegion>();
+        truckFrames.add(new TextureRegion(new Texture(Gdx.files.internal("vehicules/truck2.png"))));
+        truckFrames.add(new TextureRegion(new Texture(Gdx.files.internal("vehicules/truck3.png"))));
+        truckFrames.add(new TextureRegion(new Texture(Gdx.files.internal("vehicules/truck4.png"))));
+        truckFrames.add(new TextureRegion(new Texture(Gdx.files.internal("vehicules/truck5.png"))));
+        truckFrames.add(new TextureRegion(new Texture(Gdx.files.internal("vehicules/truck6.png"))));
+        truckFrames.add(new TextureRegion(new Texture(Gdx.files.internal("vehicules/truck7.png"))));
+        truckFrames.add(new TextureRegion(new Texture(Gdx.files.internal("vehicules/truck8.png"))));
+        truckFrames.add(new TextureRegion(new Texture(Gdx.files.internal("vehicules/truck9.png"))));
+        truckFrames.add(new TextureRegion(new Texture(Gdx.files.internal("vehicules/truck10.png"))));
+        truckFrames.add(new TextureRegion(new Texture(Gdx.files.internal("vehicules/truck11.png"))));
+        truckFrames.add(new TextureRegion(new Texture(Gdx.files.internal("vehicules/truck12.png"))));
+        truckFrames.add(new TextureRegion(new Texture(Gdx.files.internal("vehicules/truck13.png"))));
+        truckFrames.add(new TextureRegion(new Texture(Gdx.files.internal("vehicules/truck14.png"))));
+        truckFrames.add(new TextureRegion(new Texture(Gdx.files.internal("vehicules/truck15.png"))));
+        truckFrames.add(new TextureRegion(new Texture(Gdx.files.internal("vehicules/truck16.png"))));
+
+        AnimatedActor animatedActor = new AnimatedActor(0,0,Constants.OBJECT_BUILDING_WIDTH,Constants.OBJECT_BUILDING_HEIGHT,1,frames, Animation.PlayMode.NORMAL);
+        MainScreenActor dadActor = new MainScreenActor(animatedActor,this, Constants.OBJECT_TYPE_BUILDING);
+
+        AnimatedActor animatedTruck = new AnimatedActor(0,0,300,250,0.05f,truckFrames, Animation.PlayMode.NORMAL);
+        VehiculeActor truckActor = new VehiculeActor(animatedTruck,this, Constants.OBJECT_TYPE_VEHICULE,100f);
 
         stage.addActor(backgroundImage);
         stage.addActor(shadowImg);
         stage.addActor(dadActor);
-
+        stage.addActor(truckActor);
 
         //PARTIE DE TEST: LONG PRESS
        // Array<TextureRegion> frames = new Array<TextureRegion>();
@@ -150,5 +166,13 @@ public class MainScreen implements Screen {
 
     public Hud getHud() {
         return hud;
+    }
+
+    public Image getBackgroundImage() {
+        return backgroundImage;
+    }
+
+    public void setBackgroundImage(Image backgroundImage) {
+        this.backgroundImage = backgroundImage;
     }
 }

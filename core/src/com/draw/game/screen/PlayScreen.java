@@ -16,13 +16,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.draw.game.AnimatedActor;
 import com.draw.game.AnimationImage;
 import com.draw.game.Constants;
-import com.draw.game.DragAndDropActor;
+import com.draw.game.MainScreenActor;
 import com.draw.game.DragAndDropManager;
-import com.draw.game.screen.Hud;
-import com.draw.game.screen.MainScreen;
 
 public class PlayScreen extends InputListener implements Screen {
 	
@@ -59,12 +56,12 @@ public class PlayScreen extends InputListener implements Screen {
     Image menuImg;
     Image menuImgDelete;
 
-    DragAndDropActor dadActor;
-	DragAndDropActor dadActor2;
-	DragAndDropActor dadActor3;
-    DragAndDropActor dadActor4;
-    DragAndDropActor dadActor5;
-    DragAndDropActor dadActor6;
+    MainScreenActor dadActor;
+	MainScreenActor dadActor2;
+	MainScreenActor dadActor3;
+    MainScreenActor dadActor4;
+    MainScreenActor dadActor5;
+    MainScreenActor dadActor6;
 	DragAndDropManager dragAndDropManager;
 
 	Animation<TextureRegion> basicAnimation;
@@ -114,18 +111,18 @@ public class PlayScreen extends InputListener implements Screen {
 
         Animation idleAnimation = new Animation(1, frames);
         AnimationImage ai = new AnimationImage(idleAnimation);
-/*		dadActor3 = new DragAndDropActor(ai, this, Constants.OBJECT_TYPE_BUILDING);
-        dadActor = new DragAndDropActor(new Image(bat1Img),this, Constants.OBJECT_TYPE_BUILDING);
-        dadActor2 = new DragAndDropActor(new Image(bat3Img),this, Constants.OBJECT_TYPE_BUILDING);
-        dadActor3 = new DragAndDropActor(new Image(bat4Img),this, Constants.OBJECT_TYPE_BUILDING);
-        dadActor4 = new DragAndDropActor(new Image(truckImg),this,Constants.OBJECT_TYPE_BUILDING);
-        dadActor5 = new DragAndDropActor(new Image(trafficLightImg),this,Constants.OBJECT_TYPE_TRAFFICLIGHT);
-        dadActor6 = new DragAndDropActor(new Image(roadImg),this,Constants.OBJECT_TYPE_TRAFFICLIGHT);
-		DragAndDropActor dadActor7 = new DragAndDropActor(new Image(bat1Img),this,Constants.OBJECT_TYPE_BUILDING);
-		DragAndDropActor dadActor8 = new DragAndDropActor(new Image(bat4Img),this,Constants.OBJECT_TYPE_BUILDING);
-		DragAndDropActor dadActor9 = new DragAndDropActor(new Image(bat3Img),this,Constants.OBJECT_TYPE_BUILDING);
-		DragAndDropActor dadActor10 = new DragAndDropActor(new Image(bat4Img),this,Constants.OBJECT_TYPE_BUILDING);
-		DragAndDropActor dadActor11 = new DragAndDropActor(new Image(bat1Img),this,Constants.OBJECT_TYPE_BUILDING);
+/*		dadActor3 = new MainScreenActor(ai, this, Constants.OBJECT_TYPE_BUILDING);
+        dadActor = new MainScreenActor(new Image(bat1Img),this, Constants.OBJECT_TYPE_BUILDING);
+        dadActor2 = new MainScreenActor(new Image(bat3Img),this, Constants.OBJECT_TYPE_BUILDING);
+        dadActor3 = new MainScreenActor(new Image(bat4Img),this, Constants.OBJECT_TYPE_BUILDING);
+        dadActor4 = new MainScreenActor(new Image(truckImg),this,Constants.OBJECT_TYPE_BUILDING);
+        dadActor5 = new MainScreenActor(new Image(trafficLightImg),this,Constants.OBJECT_TYPE_TRAFFICLIGHT);
+        dadActor6 = new MainScreenActor(new Image(roadImg),this,Constants.OBJECT_TYPE_TRAFFICLIGHT);
+		MainScreenActor dadActor7 = new MainScreenActor(new Image(bat1Img),this,Constants.OBJECT_TYPE_BUILDING);
+		MainScreenActor dadActor8 = new MainScreenActor(new Image(bat4Img),this,Constants.OBJECT_TYPE_BUILDING);
+		MainScreenActor dadActor9 = new MainScreenActor(new Image(bat3Img),this,Constants.OBJECT_TYPE_BUILDING);
+		MainScreenActor dadActor10 = new MainScreenActor(new Image(bat4Img),this,Constants.OBJECT_TYPE_BUILDING);
+		MainScreenActor dadActor11 = new MainScreenActor(new Image(bat1Img),this,Constants.OBJECT_TYPE_BUILDING);
         stage.addActor(groundImg);*/
 //        stage.addActor(menuImg);// Si on deplace la camera ca restera en place: Sur un autre stage/camera
 

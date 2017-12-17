@@ -29,5 +29,7 @@ public class Constants {
 
     public static final int DRAG_ACTOR_TIMER = 3;
 
+    public static final int OBJECT_BUILDING_HEIGHT=750;
 
+    public static final int OBJECT_BUILDING_WIDTH=350;
 }
