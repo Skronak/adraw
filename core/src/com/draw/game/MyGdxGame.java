@@ -6,9 +6,19 @@ import com.draw.game.screen.SplashScreen;
 
 public class MyGdxGame extends Game {
 
+	private boolean devMode;
+
+	public MyGdxGame(boolean devMode){
+		this.devMode=devMode;
+	}
 	@Override
 	public void create () {
-		setScreen( new MainScreen() );
+
+		if (devMode) {
+			setScreen(new MainScreen());
+		} else {
+			setScreen(new SplashScreen(this));
+		}
 	}
 
 	@Override

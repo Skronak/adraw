@@ -61,6 +61,7 @@ public class MainScreenActor extends Group {
              playAnimation=false;
 
              //Change taille du shadow et on le rend visible
+             dx = dragGroup.getX() - touchDown_x;
              playScreen.getShadowImg().setSize(dragActor.getWidth(),dragActor.getHeight());
              playScreen.getShadowImg().setPosition(x + dx, Constants.GROUND_HEIGHT);
              playScreen.getShadowImg().setVisible(true);

@@ -25,12 +25,14 @@ public class HudButtonListener extends InputListener {
     private boolean dragging;
     private float deltaX, deltaY;
     private float initialPosX, initialPosy;
+    private int type;
 
-    public HudButtonListener(Hud hud, Actor actor){
+    public HudButtonListener(Hud hud, Actor actor, int type){
         this.hud=hud;
         this.parentActor = actor;
         this.initialPosX = actor.getX();
         this.initialPosy = actor.getY();
+        this.type=type;
     }
 
     public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -86,7 +88,7 @@ public class HudButtonListener extends InputListener {
         actor.addAction(Actions.sequence(Actions.scaleTo(0.1f,0.1f,0.5f),Actions.removeActor(actor)));
 
         // Ajoute acteur sur l'hud pour le deplacer sur tt l'ecran
-        hud.getStage().addActor(parentActor);
+       // hud.getStage().addActor(parentActor);
         parentActor.setPosition(stageTouchDownX-(parentActor.getWidth()/2),stageTouchDownY-(parentActor.getHeight()/2));
 
         // Affiche le shadow pour le placement sur le stage
