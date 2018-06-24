@@ -2,13 +2,17 @@ package com.draw.game.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.draw.game.Constants;
 import com.draw.game.MyGdxGame;
@@ -19,28 +23,30 @@ import com.draw.game.MyGdxGame;
 
 public class SplashScreen implements Screen {
 
-    private Texture texture=new Texture(Gdx.files.internal("logo.png"));
-    private Image splashImage=new Image(texture);
-    private MainScreen playScreen = new MainScreen();
+    private Image splashImage;
     private MyGdxGame game;
-    private Camera camera = new OrthographicCamera(Constants.V_WIDTH, Constants.V_HEIGHT);
-    private StretchViewport viewport = new StretchViewport(Constants.V_WIDTH, Constants.V_HEIGHT, camera);
-    private Stage stage = new Stage(viewport);
+    private Camera camera;
+    private StretchViewport viewport;
+    private Stage stage;
+    private boolean devMode;
 
-    public SplashScreen(MyGdxGame game){
-        this.game=game;
+    public SplashScreen(MyGdxGame game, boolean devMode){
+        this.game = game;
+        splashImage=new Image(new Texture(Gdx.files.internal("logo.png")));
+        camera = new OrthographicCamera(Constants.V_WIDTH, Constants.V_HEIGHT);
+        viewport = new StretchViewport(Constants.V_WIDTH, Constants.V_HEIGHT, camera);
+        stage = new Stage(viewport);
+        this.devMode = devMode;
     }
 
     @Override
     public void show() {
         stage.addActor(splashImage);
-        splashImage.addAction(Actions.sequence(Actions.alpha(0)
-                , Actions.fadeIn(2.0f), Actions.delay(0.5f), Actions.fadeOut(2.0f), Actions.run(new Runnable() {
-                    @Override
-                    public void run() {
-                        game.setScreen(playScreen);
-                    }
-                })));
+
+        if (!devMode){
+            splashImage.addAction(Actions.sequence(Actions.alpha(0)
+                    , Actions.fadeIn(1.0f)));
+        }
     }
 
     @Override
@@ -49,6 +55,20 @@ public class SplashScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act();
         stage.draw();
+
+        if (game.getAssetManager().getAssetManager().update() && splashImage.getActions().size==0) {
+            Gdx.app.log("SplashScreen","Asset loaded !");
+            if (devMode){
+                game.setScreen(new MainScreen(game));
+            } else {
+                splashImage.addAction(Actions.sequence(Actions.fadeOut(1.0f), Actions.run(new Runnable() {
+                    @Override
+                    public void run() {
+                        game.setScreen(new MainScreen(game));
+                    }
+                })));
+            }
+        }
     }
 
     @Override
@@ -66,7 +86,6 @@ public class SplashScreen implements Screen {
     }
     @Override
     public void dispose() {
-        texture.dispose();
         stage.dispose();
     }
 }

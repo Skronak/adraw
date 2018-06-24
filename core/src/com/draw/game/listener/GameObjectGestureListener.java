@@ -8,13 +8,14 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.draw.game.AnimatedActor;
+import com.draw.game.MainScreenActor;
 
 /**
  * Created by Skronak on 11/11/2017.
  */
 
 public class GameObjectGestureListener extends ActorGestureListener {
-    AnimatedActor parentActor;
+    MainScreenActor parentActor;
     float touchDown_x;
     float touchDown_y;
     float dx;
@@ -22,20 +23,13 @@ public class GameObjectGestureListener extends ActorGestureListener {
     float h;
 
 
-    public GameObjectGestureListener(AnimatedActor actor) {
+    public GameObjectGestureListener(MainScreenActor actor) {
         parentActor = actor;
         h = actor.getHeight() / 2;
     }
 
     public boolean longPress(Actor actor, float x, float y) {
         Gdx.app.log("LONG PRESS", "LONG PRESS");
-        parentActor.setMoveable(true);
-
-        parentActor.addAction(Actions.parallel(
-                Actions.scaleTo(1.5f, 1.5f, 0.25f, Interpolation.fade),
-                Actions.color(new Color(1.0f, 1.0f, 1.0f, 0.5f), 0.25f, Interpolation.fade) )
-        );
-
         return true;
     }
 }

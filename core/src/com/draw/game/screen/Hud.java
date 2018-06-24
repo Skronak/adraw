@@ -1,27 +1,22 @@
 package com.draw.game.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.draw.game.Constants;
-import com.draw.game.listener.HudButtonListener;
+import com.draw.game.listener.IconMovableListener;
 import com.draw.game.utils.CustomVerticalGroup;
 
 /**
@@ -33,15 +28,6 @@ public class Hud implements Disposable {
     private Table table;
     private MainScreen playScreen;
     private Skin skin;
-    private Image test1;
-    private Image test2;
-    private Image test3;
-    private Image test4;
-    private Image test5;
-    private Image test6;
-    private Image test7;
-    private Image test8;
-    private Image test9;
     private CustomVerticalGroup scrollContainerVG;
 
     // TODO: TESTER HUD DIRECTEMENT DANS STAGE, DEPLACE SYSTEMATIQUEMENT
@@ -51,36 +37,7 @@ public class Hud implements Disposable {
         viewport = new StretchViewport(Constants.V_WIDTH, Constants.V_HEIGHT, camera);
         stage = new Stage(viewport);
         skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
-        Texture texture = new Texture(Gdx.files.internal("building_icon.png"));
-        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        test1 = new Image(texture);
-        test1.addListener(new HudButtonListener(this,test1,2));
-        texture = new Texture(Gdx.files.internal("truck_icon.png"));
-        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        test2 = new Image(texture);
-        test2.addListener(new HudButtonListener(this,test2,1));
-        texture = new Texture(Gdx.files.internal("traffic_light_icon.png"));
-        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        test3 = new Image(texture);
-        test3.addListener(new HudButtonListener(this,test3,1));
-        texture = new Texture(Gdx.files.internal("building2_icon.png"));
-        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        test4 = new Image(texture);
-        test4.addListener(new HudButtonListener(this,test4,1));
-        texture = new Texture(Gdx.files.internal("building3_icon.png"));
-        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        test5 = new Image(texture);
-        test5.addListener(new HudButtonListener(this,test5,1));
-        texture = new Texture(Gdx.files.internal("bat5_icon.png"));
-        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        test6 = new Image(texture);
-        test6.addListener(new HudButtonListener(this,test6,1));
-        texture = new Texture(Gdx.files.internal("bat5_icon.png"));
-        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        test7 = new Image(texture);
-        test7.addListener(new HudButtonListener(this,test7,1));
-        test8 = new Image(new Texture(Gdx.files.internal("bat1_icon.png")));
-        test9 = new Image(new Texture(Gdx.files.internal("bat1_icon.png")));
+       // texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         initHud();
     }
@@ -96,15 +53,22 @@ public class Hud implements Disposable {
 
         scrollContainerVG = new CustomVerticalGroup();
         scrollContainerVG.space(10f);
-        scrollContainerVG.addActor(test1);
-        scrollContainerVG.addActor(test2);
-        scrollContainerVG.addActor(test3);
-        scrollContainerVG.addActor(test4);
-        scrollContainerVG.addActor(test5);
-        scrollContainerVG.addActor(test6);
-        scrollContainerVG.addActor(test7);
-        scrollContainerVG.addActor(test8);
-        scrollContainerVG.addActor(test9);
+
+        Texture texture = new Texture(Gdx.files.internal("icon/building_icon.png"));
+        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        Image image = new Image(texture);
+        image.addListener(new IconMovableListener(this,image,1));
+        scrollContainerVG.addActor(image);
+
+        Texture texture2 = new Texture(Gdx.files.internal("icon/building2_icon.png"));
+        Image image2 = new Image(texture2);
+        image2.addListener(new IconMovableListener(this,image2,2));
+        scrollContainerVG.addActor(image2);
+
+        Texture texture3 = new Texture(Gdx.files.internal("icon/building3_icon.png"));
+        Image image3 = new Image(texture3);
+        image3.addListener(new IconMovableListener(this,image3,3));
+        scrollContainerVG.addActor(image3);
 
         ScrollPane.ScrollPaneStyle paneStyle = new ScrollPane.ScrollPaneStyle();
         paneStyle.hScroll = paneStyle.hScrollKnob = paneStyle.vScroll = paneStyle.vScrollKnob;
@@ -117,6 +81,7 @@ public class Hud implements Disposable {
         table.add(new Image(new Texture(Gdx.files.internal("direction.png")))).top();
 
         stage.addActor(table);
+
     }
 
     /**
@@ -143,4 +108,5 @@ public class Hud implements Disposable {
     public CustomVerticalGroup getScrollContainerVG() {
         return scrollContainerVG;
     }
+
 }

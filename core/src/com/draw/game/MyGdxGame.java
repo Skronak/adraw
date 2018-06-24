@@ -1,24 +1,31 @@
 package com.draw.game;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
-import com.draw.game.screen.MainScreen;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
+import com.draw.game.manager.MyAssetManager;
 import com.draw.game.screen.SplashScreen;
 
 public class MyGdxGame extends Game {
 
 	private boolean devMode;
+	private MyAssetManager assetManager;
 
 	public MyGdxGame(boolean devMode){
 		this.devMode=devMode;
 	}
+
 	@Override
 	public void create () {
+		assetManager = new MyAssetManager(this);
 
-		if (devMode) {
-			setScreen(new MainScreen());
+		if(devMode) {
+			Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		} else {
-			setScreen(new SplashScreen(this));
+			Gdx.app.setLogLevel(Application.LOG_ERROR);
 		}
+		setScreen(new SplashScreen(this,devMode));
 	}
 
 	@Override
@@ -28,5 +35,10 @@ public class MyGdxGame extends Game {
 	
 	@Override
 	public void dispose () {
+		assetManager.dispose();
+	}
+
+	public MyAssetManager getAssetManager() {
+		return assetManager;
 	}
 }

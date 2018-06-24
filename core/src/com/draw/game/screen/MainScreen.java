@@ -1,5 +1,6 @@
 package com.draw.game.screen;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
@@ -8,6 +9,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
@@ -15,7 +18,11 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.draw.game.AnimatedActor;
 import com.draw.game.Constants;
 import com.draw.game.MainScreenActor;
+import com.draw.game.MyGdxGame;
 import com.draw.game.VehiculeActor;
+import com.draw.game.actor.AnimatedBaseActor;
+import com.draw.game.listener.GameObjectGestureListener;
+import com.draw.game.listener.GameObjectListener;
 import com.draw.game.listener.MainInputProcessor;
 import com.draw.game.manager.TipsManager;
 
@@ -34,10 +41,25 @@ public class MainScreen implements Screen {
     private Image shadowImg;
     private boolean isMoveable; // indique si on peut scroller l'ecran
     private TipsManager tipsManager;
+    private MyGdxGame myGdxGame;
+    private Group background;
+    private Group buildingGroup;
+    private Group decorationBefGroup;
+    private Group vehiculeGroup;
+    private Group decorationAftGroup;
 
-    public MainScreen(){
+    public MainScreen(MyGdxGame game){
+        this.myGdxGame = game;
         backgroundImage = new Image(new Texture(Gdx.files.internal("ground.png")));
-        shadowImg = new Image(new Texture(Gdx.files.internal("bat1_ptr.png")));
+        //shadowImg = new Image(new Texture(Gdx.files.internal("icon/building_icon.png")));
+
+        Group background= new Group();
+        Group buildingGroup;
+        Group decorationBefGroup;
+        Group vehiculeGroup;
+        Group decorationAftGroup;
+
+        shadowImg = new Image(myGdxGame.getAssetManager().getAssetManager().get("shadow.png",Texture.class));
         shadowImg.setVisible(false);
         shadowImg.setScaleX(1.3f);
         camera = new OrthographicCamera(Constants.V_WIDTH, Constants.V_HEIGHT);
@@ -58,50 +80,26 @@ public class MainScreen implements Screen {
 
     @Override
     public void show() {
-        Array<TextureRegion> frames = new Array<TextureRegion>();
-        frames.add(new TextureRegion(new Texture(Gdx.files.internal("building/build1.png"))));
-        frames.add(new TextureRegion(new Texture(Gdx.files.internal("building/build2.png"))));
-        frames.add(new TextureRegion(new Texture(Gdx.files.internal("building/build2.png"))));
-        Array<TextureRegion> truckFrames = new Array<TextureRegion>();
-        truckFrames.add(new TextureRegion(new Texture(Gdx.files.internal("vehicules/truck2.png"))));
-        truckFrames.add(new TextureRegion(new Texture(Gdx.files.internal("vehicules/truck3.png"))));
-        truckFrames.add(new TextureRegion(new Texture(Gdx.files.internal("vehicules/truck4.png"))));
-        truckFrames.add(new TextureRegion(new Texture(Gdx.files.internal("vehicules/truck5.png"))));
-        truckFrames.add(new TextureRegion(new Texture(Gdx.files.internal("vehicules/truck6.png"))));
-        truckFrames.add(new TextureRegion(new Texture(Gdx.files.internal("vehicules/truck7.png"))));
-        truckFrames.add(new TextureRegion(new Texture(Gdx.files.internal("vehicules/truck8.png"))));
-        truckFrames.add(new TextureRegion(new Texture(Gdx.files.internal("vehicules/truck9.png"))));
-        truckFrames.add(new TextureRegion(new Texture(Gdx.files.internal("vehicules/truck10.png"))));
-        truckFrames.add(new TextureRegion(new Texture(Gdx.files.internal("vehicules/truck11.png"))));
-        truckFrames.add(new TextureRegion(new Texture(Gdx.files.internal("vehicules/truck12.png"))));
-        truckFrames.add(new TextureRegion(new Texture(Gdx.files.internal("vehicules/truck13.png"))));
-        truckFrames.add(new TextureRegion(new Texture(Gdx.files.internal("vehicules/truck14.png"))));
-        truckFrames.add(new TextureRegion(new Texture(Gdx.files.internal("vehicules/truck15.png"))));
-        truckFrames.add(new TextureRegion(new Texture(Gdx.files.internal("vehicules/truck16.png"))));
+        //Array<TextureRegion> frames = new Array<TextureRegion>();
+        //frames.add(new TextureRegion(new Texture(Gdx.files.internal("building/build1.png"))));
+        //frames.add(new TextureRegion(new Texture(Gdx.files.internal("building/build2.png"))));
+        //frames.add(new TextureRegion(new Texture(Gdx.files.internal("building/build2.png"))));
+        Array<TextureRegion> truckFrames = myGdxGame.getAssetManager().getTruckFrames();
 
-        AnimatedActor animatedActor = new AnimatedActor(0,0,Constants.OBJECT_BUILDING_WIDTH,Constants.OBJECT_BUILDING_HEIGHT,1,frames, Animation.PlayMode.NORMAL);
-        MainScreenActor dadActor = new MainScreenActor(animatedActor,this, Constants.OBJECT_TYPE_BUILDING);
-
+        //AnimatedActor animatedActor = new AnimatedActor(0,0,Constants.OBJECT_BUILDING_WIDTH,Constants.OBJECT_BUILDING_HEIGHT,1,frames, Animation.PlayMode.NORMAL);
+        //MainScreenActor dadActor = new MainScreenActor(animatedActor,this, Constants.OBJECT_TYPE_BUILDING);
         AnimatedActor animatedTruck = new AnimatedActor(0,0,300,250,0.05f,truckFrames, Animation.PlayMode.NORMAL);
         VehiculeActor truckActor = new VehiculeActor(animatedTruck,this, Constants.OBJECT_TYPE_VEHICULE,100f);
 
         stage.addActor(backgroundImage);
         stage.addActor(shadowImg);
-        stage.addActor(dadActor);
+        //stage.addActor(dadActor);
         stage.addActor(truckActor);
 
         //PARTIE DE TEST: LONG PRESS
-       // Array<TextureRegion> frames = new Array<TextureRegion>();
-       // frames.add(new TextureRegion(new Texture(Gdx.files.internal("bat1.png"))));
-       // frames.add(new TextureRegion(new Texture(Gdx.files.internal("bat1a.png"))));
-       // frames.add(new TextureRegion(new Texture(Gdx.files.internal("bat1b.png"))));
-       // frames.add(new TextureRegion(new Texture(Gdx.files.internal("bat1c.png"))));
-       // frames.add(new TextureRegion(new Texture(Gdx.files.internal("bat1d.png"))));
-       // AnimatedActor animatedActor = new AnimatedActor(0,0,170,320,1,frames, Animation.PlayMode.NORMAL);
-       // animatedActor.addListener(new GameObjectListener(animatedActor));
-       // animatedActor.addListener(new GameObjectGestureListener(animatedActor));
-       // stage.addActor(animatedActor);
-        tipsManager.generateTips();
+       truckActor.addListener(new GameObjectGestureListener(truckActor));
+
+       tipsManager.generateTips();
     }
 
     @Override
@@ -113,6 +111,7 @@ public class MainScreen implements Screen {
         stage.act();
 
         hud.draw();
+
     }
 
     public void updateTips() {

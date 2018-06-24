@@ -15,9 +15,9 @@ import com.draw.game.screen.Hud;
  * Created by Skronak on 22/11/2017.
  */
 //TODO faire apparaitre objet en fonction du bouton cliqué
-public class HudButtonListener extends InputListener {
+public class IconMovableListener extends InputListener {
 
-    private Actor parentActor;
+    private Image parentActor;
     private Hud hud;
     private float tapSquareSize = 14, touchDownX = -1, touchDownY = -1, stageTouchDownX = -1, stageTouchDownY = -1;
     private int pressedPointer = -1;
@@ -27,7 +27,7 @@ public class HudButtonListener extends InputListener {
     private float initialPosX, initialPosy;
     private int type;
 
-    public HudButtonListener(Hud hud, Actor actor, int type){
+    public IconMovableListener(Hud hud, Image actor, int type){
         this.hud=hud;
         this.parentActor = actor;
         this.initialPosX = actor.getX();
@@ -46,7 +46,7 @@ public class HudButtonListener extends InputListener {
 
         event.stop();
 
-       return true;
+        return true;
     }
 
     public void touchDragged (InputEvent event, float x, float y, int pointer) {
@@ -76,19 +76,21 @@ public class HudButtonListener extends InputListener {
     }
 
     public void dragStart (InputEvent event, float x, float y, int pointer) {
-        Gdx.app.log("parentActor", "dragStart");
+        Gdx.app.log("parentActor", "dragStart "+type);
 
-        // Animation pour retirer lentement l'objet du HUD
-        Actor actor = new Actor();
-        actor.setWidth(parentActor.getWidth());
-        actor.setHeight(parentActor.getWidth());
-//        actor.debug();
-        hud.getScrollContainerVG().addActor(actor);
-        hud.getScrollContainerVG().swapActor(actor,parentActor);
-        actor.addAction(Actions.sequence(Actions.scaleTo(0.1f,0.1f,0.5f),Actions.removeActor(actor)));
+        // Replace actor in VG
+        Image imageReplace= new Image(parentActor.getDrawable());
+        imageReplace.setWidth(parentActor.getWidth());
+        imageReplace.setHeight(parentActor.getWidth());
+        imageReplace.addListener(new IconMovableListener(hud,imageReplace,type));
+        hud.getScrollContainerVG().addActor(imageReplace);
+        hud.getScrollContainerVG().swapActor(imageReplace,parentActor);
 
-        // Ajoute acteur sur l'hud pour le deplacer sur tt l'ecran
-       // hud.getStage().addActor(parentActor);
+        // make actor transparent
+        parentActor.getColor().a=0.3f;
+
+        // Add Actor to the stage
+         hud.getStage().addActor(parentActor);
         parentActor.setPosition(stageTouchDownX-(parentActor.getWidth()/2),stageTouchDownY-(parentActor.getHeight()/2));
 
         // Affiche le shadow pour le placement sur le stage
@@ -98,11 +100,17 @@ public class HudButtonListener extends InputListener {
     }
 
     public void drag(InputEvent event, float x, float y, int pointer) {
-        Gdx.app.log("parentActor", "drag");
         this.parentActor.moveBy(x - this.parentActor.getWidth() / 2, y - this.parentActor.getHeight() / 2);
         hud.getPlayScreen().getShadowImg().setPosition(parentActor.getX(), Constants.GROUND_HEIGHT);
     }
 
+    /**
+     * Add actor to the stage
+     * @param event
+     * @param x
+     * @param y
+     * @param pointer
+     */
     public void dragStop (InputEvent event, float x, float y, int pointer) {
         parentActor.remove();
         MainScreenActor dadActor = new MainScreenActor(new Image( new Texture(Gdx.files.internal("bat1.png"))),hud.getPlayScreen(), Constants.OBJECT_TYPE_BUILDING);
@@ -120,4 +128,12 @@ public class HudButtonListener extends InputListener {
     public boolean isDragging () {
         return dragging;
     }
+
+    public void deleteActorFromVG(){
+        Actor actor = new Actor();
+        hud.getScrollContainerVG().addActor(actor);
+        hud.getScrollContainerVG().swapActor(actor,parentActor);
+        actor.addAction(Actions.sequence(Actions.scaleTo(0.1f,0.1f,0.5f),Actions.removeActor(actor)));
+    }
+
 }

@@ -29,7 +29,7 @@ public class GameObjectListener extends InputListener {
     }
 
     public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-        Gdx.app.log("down", String.valueOf(x)+"/"+String.valueOf(y));
+        Gdx.app.debug("GameObjectListener", String.valueOf("touchDown "+ x +"/"+String.valueOf(y)));
         parentActor.setPlayAnimation(false);
         touchDown_x = x;
         touchDown_y = h - y;
@@ -43,12 +43,12 @@ public class GameObjectListener extends InputListener {
             dy = parentActor.getY() - h + touchDown_y;
             parentActor.setPosition(x + dx, y + dy);
         }
-        Gdx.app.log("drag", String.valueOf(x+dx)+"/"+String.valueOf(y+dy));
+        Gdx.app.log("GameObjectListener", String.valueOf(x+dx)+"/"+String.valueOf(y+dy));
 
     }
 
     public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-        Gdx.app.log("up", String.valueOf(x)+"/"+String.valueOf(y));
+        Gdx.app.log("GameObjectListener", String.valueOf(x)+"/"+String.valueOf(y));
         parentActor.setPlayAnimation(true);
         parentActor.setMoveable(false);
 

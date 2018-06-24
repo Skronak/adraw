@@ -30,14 +30,14 @@ public class MainScreenActor extends Group {
     private float touchDown_y;
     private float dx;
     private float dy;
-    protected MainScreen playScreen;
+    protected MainScreen mainScreen;
     protected boolean playAnimation;
 
     // Type d'objet (pour la logique)
     int type;
 
-	public MainScreenActor(final Actor actor, final MainScreen playScreen, int type) {
-        this.playScreen=playScreen;
+	public MainScreenActor(final Actor actor, final MainScreen mainScreen, int type) {
+        this.mainScreen=mainScreen;
         this.type=type;
 		dragActor = actor;
         playAnimation=true;
@@ -57,14 +57,14 @@ public class MainScreenActor extends Group {
 			final float h = dragActor.getHeight() / 2;
 
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-             Gdx.app.log("down", String.valueOf(x)+"/"+String.valueOf(y));
+             Gdx.app.log("MainScreenActor", String.valueOf(x)+"/"+String.valueOf(y));
              playAnimation=false;
 
              //Change taille du shadow et on le rend visible
              dx = dragGroup.getX() - touchDown_x;
-             playScreen.getShadowImg().setSize(dragActor.getWidth(),dragActor.getHeight());
-             playScreen.getShadowImg().setPosition(x + dx, Constants.GROUND_HEIGHT);
-             playScreen.getShadowImg().setVisible(true);
+             mainScreen.getShadowImg().setSize(dragActor.getWidth(),dragActor.getHeight());
+             mainScreen.getShadowImg().setPosition(x + dx, Constants.GROUND_HEIGHT);
+             mainScreen.getShadowImg().setVisible(true);
 
              //Change aspect visuel
              dragGroup.clearActions();
@@ -83,14 +83,14 @@ public class MainScreenActor extends Group {
                 dx = dragGroup.getX() - touchDown_x;
             	dy = dragGroup.getY() - h + touchDown_y;
                 // Position shadow
-               playScreen.getShadowImg().setPosition(x + dx, Constants.GROUND_HEIGHT);
+                mainScreen.getShadowImg().setPosition(x + dx, Constants.GROUND_HEIGHT);
                 // Position objet
                 dragGroup.setPosition(x + dx, y + dy);
             }
 
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 Gdx.app.log("up", String.valueOf(x)+"/"+String.valueOf(y));
-                playScreen.getShadowImg().setVisible(false);
+                mainScreen.getShadowImg().setVisible(false);
 
                 // Restaure l'aspect visuel au drop
                 dragGroup.clearActions();
@@ -98,7 +98,7 @@ public class MainScreenActor extends Group {
                     Actions.scaleTo(1.0f, 1.0f, 0.25f, Interpolation.fade),
                     Actions.color(new Color(1.0f, 1.0f, 1.0f, 1.0f), 0.25f, Interpolation.fade))
                 );
-                dragGroup.addAction(Actions.moveTo(playScreen.getShadowImg().getX(),playScreen.getShadowImg().getY(),0.2f));
+                dragGroup.addAction(Actions.moveTo(mainScreen.getShadowImg().getX(),mainScreen.getShadowImg().getY(),0.2f));
 
                dx = dragGroup.getX() - touchDown_x;                 // x & y = position du curseur relative a l'acteur
 
@@ -113,8 +113,8 @@ public class MainScreenActor extends Group {
     // Depose l'actor par dessus systematiquement
     public void addActorToStage() {
         this.remove();
-        playScreen.getStage().addActor(this);
-        Gdx.app.log("actorList", String.valueOf(playScreen.getStage().getActors().size));
+        mainScreen.getStage().addActor(this);
+        Gdx.app.log("actorList", String.valueOf(mainScreen.getStage().getActors().size));
     }
 
     @Override
