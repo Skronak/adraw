@@ -8,13 +8,21 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
+import com.draw.game.listener.GameObjectGestureListener;
 import com.draw.game.screen.MainScreen;
 
 import java.util.Random;
@@ -32,6 +40,7 @@ public class MainScreenActor extends Group {
     private float dy;
     protected MainScreen mainScreen;
     protected boolean playAnimation;
+    private ImageButton deleteButton;
 
     // Type d'objet (pour la logique)
     int type;
@@ -41,10 +50,11 @@ public class MainScreenActor extends Group {
         this.type=type;
 		dragActor = actor;
         playAnimation=true;
+
+
         if (actor instanceof Image) {
             debugRandomBuilding();
         }
-
 		dragActor.setOrigin( actor.getWidth()/2, actor.getHeight()/2 );
 
 		dragGroup = new Group();
@@ -53,20 +63,25 @@ public class MainScreenActor extends Group {
 		dragGroup.addActor(dragActor );
         dragGroup.setTransform(true);
 
-		dragGroup.addListener(new InputListener() {
+        deleteButton = constructDeleteButton();
+        GameObjectGestureListener gameObjectGestureListener = new GameObjectGestureListener(this);
+        dragGroup.addListener(gameObjectGestureListener);
+
+        dragGroup.addListener(new InputListener() {
 			final float h = dragActor.getHeight() / 2;
 
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
              Gdx.app.log("MainScreenActor", String.valueOf(x)+"/"+String.valueOf(y));
              playAnimation=false;
+             deleteButton.setVisible(false);
 
              //Change taille du shadow et on le rend visible
              dx = dragGroup.getX() - touchDown_x;
              mainScreen.getShadowImg().setSize(dragActor.getWidth(),dragActor.getHeight());
-             mainScreen.getShadowImg().setPosition(x + dx, Constants.GROUND_HEIGHT);
+             mainScreen.getShadowImg().setPosition(dragGroup.getX()-dragGroup.getWidth()/2, Constants.GROUND_HEIGHT);
              mainScreen.getShadowImg().setVisible(true);
 
-             //Change aspect visuel
+            //Change aspect visuel
              dragGroup.clearActions();
              dragGroup.addAction(Actions.parallel(
                      Actions.scaleTo(1.5f, 1.5f, 0.25f, Interpolation.fade),
@@ -107,14 +122,61 @@ public class MainScreenActor extends Group {
             }
 
 		});
-		this.addActor(dragGroup);
+
+        this.addActor(dragGroup);
+        this.addActor(deleteButton);
     }
 
-    // Depose l'actor par dessus systematiquement
+    private ImageButton constructDeleteButton() {
+        Drawable deleteDrawableUp = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("icon/delete_up.png"))));
+        Drawable deleteDrawableDown = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("icon/delete_down.png"))));
+        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
+        style.up = deleteDrawableUp;
+        style.down = deleteDrawableDown;
+        final ImageButton deleteButton = new ImageButton(style);
+
+        deleteButton.setSize(100,100);
+        deleteButton.setVisible(false);
+        deleteButton.addListener(new InputListener() {
+           @Override
+           public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+               return true;
+           }
+           @Override
+           public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+               deleteButton.addAction(Actions.run(new Runnable() {
+                   @Override
+                   public void run() {
+                       dragGroup.getParent().remove();
+                   }
+               }));
+           }});
+
+        return deleteButton;
+    }
+
+    // Affiche le menu
+    public void showMenu() {
+        deleteButton.setPosition(dragGroup.getX()+dragActor.getWidth(), dragGroup.getY()+dragActor.getHeight());
+        deleteButton.setVisible(true);
+    }
+
+    // Depose l'actor dans le stage
     public void addActorToStage() {
         this.remove();
-        mainScreen.getStage().addActor(this);
+//        mainScreen.getStage().addActor(this);
         Gdx.app.log("actorList", String.valueOf(mainScreen.getStage().getActors().size));
+
+        switch (type){
+            case Constants.OBJECT_TYPE_BUILDING: mainScreen.getBuildingGroup().addActor(this);
+            break;
+            case Constants.OBJECT_TYPE_BACKGROUND: mainScreen.getBackgroundGroup().addActor(this);
+            break;
+            case Constants.OBJECT_TYPE_VEHICULE: mainScreen.getVehiculeGroup().addActor(this);
+            break;
+            default: mainScreen.getForegroundGroup().addActor(this);
+            break;
+        }
     }
 
     @Override

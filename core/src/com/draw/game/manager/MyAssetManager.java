@@ -1,8 +1,10 @@
 package com.draw.game.manager;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.draw.game.MyGdxGame;
@@ -11,14 +13,16 @@ public class MyAssetManager implements Disposable{
 
     private AssetManager assetManager;
     private MyGdxGame game;
+    private Skin skin;
 
     public MyAssetManager(MyGdxGame game) {
          this.game = game;
          assetManager = new AssetManager();
-        loadTexture();
+         loadTexture();
+         loadUtils();
     }
 
-    public void loadTexture(){
+    private void loadTexture(){
         assetManager.load("icon/building_icon.png", Texture.class);
         assetManager.load("icon/building2_icon.png", Texture.class);
         assetManager.load("icon/building3_icon.png", Texture.class);
@@ -41,6 +45,10 @@ public class MyAssetManager implements Disposable{
         assetManager.load("vehicules/truck16.png",Texture.class);
     }
 
+    private void loadUtils(){
+        skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
+    }
+
     public Array<TextureRegion> getTruckFrames(){
         Array<TextureRegion> truckFrames = new Array<TextureRegion>();
         truckFrames.add(new TextureRegion(assetManager.get("vehicules/truck2.png",Texture.class)));
@@ -59,6 +67,10 @@ public class MyAssetManager implements Disposable{
         truckFrames.add(new TextureRegion(assetManager.get("vehicules/truck15.png",Texture.class)));
         truckFrames.add(new TextureRegion(assetManager.get("vehicules/truck16.png",Texture.class)));
         return truckFrames;
+    }
+
+    public Skin getSkin(){
+        return skin;
     }
 
     public AssetManager getAssetManager() {

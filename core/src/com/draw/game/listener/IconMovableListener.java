@@ -2,6 +2,7 @@ package com.draw.game.listener;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -26,6 +27,7 @@ public class IconMovableListener extends InputListener {
     private float deltaX, deltaY;
     private float initialPosX, initialPosy;
     private int type;
+    private Vector2 actorStagePos;
 
     public IconMovableListener(Hud hud, Image actor, int type){
         this.hud=hud;
@@ -90,8 +92,9 @@ public class IconMovableListener extends InputListener {
         parentActor.getColor().a=0.3f;
 
         // Add Actor to the stage
-         hud.getStage().addActor(parentActor);
-        parentActor.setPosition(stageTouchDownX-(parentActor.getWidth()/2),stageTouchDownY-(parentActor.getHeight()/2));
+        actorStagePos = new Vector2();
+        hud.getStage().addActor(parentActor);
+//        parentActor.setPosition(stageTouchDownX-(parentActor.getWidth()/2),stageTouchDownY-(parentActor.getHeight()/2));
 
         // Affiche le shadow pour le placement sur le stage
         hud.getPlayScreen().getShadowImg().setVisible(true);
@@ -99,9 +102,20 @@ public class IconMovableListener extends InputListener {
         hud.getPlayScreen().getShadowImg().setPosition(deltaX,Constants.GROUND_HEIGHT);
     }
 
+    /**
+     * Move parentActor according to the mouse
+     * Move shadow image according to the ground
+     *
+     * @param event
+     * @param x
+     * @param y
+     * @param pointer
+     */
     public void drag(InputEvent event, float x, float y, int pointer) {
+        actorStagePos = hud.getPlayScreen().getStage().screenToStageCoordinates(new Vector2(parentActor.getX(), parentActor.getY()));
         this.parentActor.moveBy(x - this.parentActor.getWidth() / 2, y - this.parentActor.getHeight() / 2);
-        hud.getPlayScreen().getShadowImg().setPosition(parentActor.getX(), Constants.GROUND_HEIGHT);
+
+        hud.getPlayScreen().getShadowImg().setPosition(actorStagePos.x, Constants.GROUND_HEIGHT);
     }
 
     /**
@@ -114,7 +128,17 @@ public class IconMovableListener extends InputListener {
     public void dragStop (InputEvent event, float x, float y, int pointer) {
         parentActor.remove();
         MainScreenActor dadActor = new MainScreenActor(new Image( new Texture(Gdx.files.internal("bat1.png"))),hud.getPlayScreen(), Constants.OBJECT_TYPE_BUILDING);
-        hud.getPlayScreen().getStage().addActor(dadActor);
+        switch (type){
+            case Constants.OBJECT_TYPE_BUILDING: hud.getPlayScreen().getBuildingGroup().addActor(dadActor);
+                break;
+            case Constants.OBJECT_TYPE_BACKGROUND: hud.getPlayScreen().getBackgroundGroup().addActor(dadActor);
+                break;
+            case Constants.OBJECT_TYPE_VEHICULE: hud.getPlayScreen().getVehiculeGroup().addActor(dadActor);
+                break;
+            default: hud.getPlayScreen().getForegroundGroup().addActor(dadActor);
+                break;
+        }
+        //        hud.getPlayScreen().getStage().addActor(dadActor);
         dadActor.getDragGroup().setPosition(hud.getPlayScreen().getShadowImg().getX()- dadActor.getWidth(), hud.getPlayScreen().getShadowImg().getY());
     }
 

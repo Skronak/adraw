@@ -16,7 +16,9 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.draw.game.Constants;
+import com.draw.game.MyGdxGame;
 import com.draw.game.listener.IconMovableListener;
+import com.draw.game.manager.MyAssetManager;
 import com.draw.game.utils.CustomVerticalGroup;
 
 /**
@@ -29,14 +31,15 @@ public class Hud implements Disposable {
     private MainScreen playScreen;
     private Skin skin;
     private CustomVerticalGroup scrollContainerVG;
+    private MyAssetManager myAssetManager;
 
     // TODO: TESTER HUD DIRECTEMENT DANS STAGE, DEPLACE SYSTEMATIQUEMENT
-    public Hud(MainScreen playScreen) {
+    public Hud(MainScreen playScreen, MyAssetManager myAssetManager) {
         this.playScreen = playScreen;
+        this.myAssetManager = myAssetManager;
         OrthographicCamera camera = new OrthographicCamera();
         viewport = new StretchViewport(Constants.V_WIDTH, Constants.V_HEIGHT, camera);
         stage = new Stage(viewport);
-        skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
        // texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         initHud();
@@ -54,20 +57,22 @@ public class Hud implements Disposable {
         scrollContainerVG = new CustomVerticalGroup();
         scrollContainerVG.space(10f);
 
-        Texture texture = new Texture(Gdx.files.internal("icon/building_icon.png"));
+        Texture texture = myAssetManager.getAssetManager().get("icon/building_icon.png",Texture.class);
         texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         Image image = new Image(texture);
-        image.addListener(new IconMovableListener(this,image,1));
+        image.addListener(new IconMovableListener(this,image,Constants.OBJECT_TYPE_BUILDING));
         scrollContainerVG.addActor(image);
 
-        Texture texture2 = new Texture(Gdx.files.internal("icon/building2_icon.png"));
+        Texture texture2 = myAssetManager.getAssetManager().get("icon/building2_icon.png",Texture.class);
+        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         Image image2 = new Image(texture2);
-        image2.addListener(new IconMovableListener(this,image2,2));
+        image2.addListener(new IconMovableListener(this,image2,Constants.OBJECT_TYPE_BUILDING));
         scrollContainerVG.addActor(image2);
 
-        Texture texture3 = new Texture(Gdx.files.internal("icon/building3_icon.png"));
+        Texture texture3 = myAssetManager.getAssetManager().get("icon/building3_icon.png",Texture.class);
+        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         Image image3 = new Image(texture3);
-        image3.addListener(new IconMovableListener(this,image3,3));
+        image3.addListener(new IconMovableListener(this,image3,Constants.OBJECT_TYPE_BUILDING));
         scrollContainerVG.addActor(image3);
 
         ScrollPane.ScrollPaneStyle paneStyle = new ScrollPane.ScrollPaneStyle();

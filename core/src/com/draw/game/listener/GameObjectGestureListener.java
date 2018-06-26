@@ -16,10 +16,6 @@ import com.draw.game.MainScreenActor;
 
 public class GameObjectGestureListener extends ActorGestureListener {
     MainScreenActor parentActor;
-    float touchDown_x;
-    float touchDown_y;
-    float dx;
-    float dy;
     float h;
 
 
@@ -30,6 +26,9 @@ public class GameObjectGestureListener extends ActorGestureListener {
 
     public boolean longPress(Actor actor, float x, float y) {
         Gdx.app.log("LONG PRESS", "LONG PRESS");
+        parentActor.showMenu();
+
         return true;
     }
+
 }

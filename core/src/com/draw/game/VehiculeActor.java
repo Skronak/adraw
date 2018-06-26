@@ -18,7 +18,7 @@ public class VehiculeActor extends MainScreenActor {
         super(actor, playScreen, type);
         this.speed=speed;
         boundMinX = playScreen.getBackgroundImage().getX();
-        boundMaxX = playScreen.getBackgroundImage().getWidth();
+        boundMaxX = playScreen.getBackgroundImage().getWidth()-actor.getWidth();
     }
 
     public void run(float deltatime){

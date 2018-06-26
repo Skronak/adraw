@@ -48,7 +48,6 @@ public class MainInputProcessor implements InputProcessor {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        Gdx.app.log("MainInputProcessor","drag from customInputProcessor");
         if (mainScreen.isMoveable()) {
             float newPos = Gdx.input.getDeltaX();
             mainScreen.getStage().getCamera().translate(-newPos, 0f, 0f);
