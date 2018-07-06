@@ -77,6 +77,7 @@ public class MainScreen implements Screen {
         //MainScreenActor dadActor = new MainScreenActor(animatedActor,this, Constants.OBJECT_TYPE_BUILDING);
         AnimatedActor animatedTruck = new AnimatedActor(0,0,300,250,0.05f,truckFrames, Animation.PlayMode.NORMAL);
         VehiculeActor truckActor = new VehiculeActor(animatedTruck,this, Constants.OBJECT_TYPE_VEHICULE,100f);
+        truckActor.getDragGroup().setPosition(0,Constants.GROUND_HEIGHT);
 
         stage.addActor(backgroundGroup);
         stage.addActor(buildingGroup);
@@ -84,15 +85,8 @@ public class MainScreen implements Screen {
         stage.addActor(foregroundGroup);
 
         backgroundGroup.addActor(backgroundImage);
-//        stage.addActor(backgroundImage);
         foregroundGroup.addActor(shadowImg);
-//        stage.addActor(shadowImg);
         vehiculeGroup.addActor(truckActor);
-        //stage.addActor(dadActor);
-//        stage.addActor(truckActor);
-
-        //PARTIE DE TEST: LONG PRESS
-       truckActor.addListener(new GameObjectGestureListener(truckActor));
 
        tipsManager.generateTips();
     }

@@ -67,6 +67,7 @@ public class MainScreenActor extends Group {
         GameObjectGestureListener gameObjectGestureListener = new GameObjectGestureListener(this);
         dragGroup.addListener(gameObjectGestureListener);
 
+        //TODO separate class
         dragGroup.addListener(new InputListener() {
 			final float h = dragActor.getHeight() / 2;
 
@@ -79,7 +80,7 @@ public class MainScreenActor extends Group {
              dx = dragGroup.getX() - touchDown_x;
              mainScreen.getShadowImg().setSize(dragActor.getWidth(),dragActor.getHeight());
              mainScreen.getShadowImg().setPosition(dragGroup.getX()-dragGroup.getWidth()/2, Constants.GROUND_HEIGHT);
-             mainScreen.getShadowImg().setVisible(true);
+//             mainScreen.getShadowImg().setVisible(true);
 
             //Change aspect visuel
              dragGroup.clearActions();
@@ -94,6 +95,7 @@ public class MainScreenActor extends Group {
             }
 
             public void touchDragged(InputEvent event, float x, float y, int pointer) {
+                mainScreen.getShadowImg().setVisible(true);
                 Gdx.app.log("touchDragged", String.valueOf(x)+"/"+String.valueOf(y));
                 dx = dragGroup.getX() - touchDown_x;
             	dy = dragGroup.getY() - h + touchDown_y;
@@ -162,10 +164,10 @@ public class MainScreenActor extends Group {
     }
 
     // Depose l'actor dans le stage
+    // Toujours en premiere position de sa couche
     public void addActorToStage() {
         this.remove();
-//        mainScreen.getStage().addActor(this);
-        Gdx.app.log("actorList", String.valueOf(mainScreen.getStage().getActors().size));
+        Gdx.app.log("actor in Stage", String.valueOf(mainScreen.getStage().getActors().size));
 
         switch (type){
             case Constants.OBJECT_TYPE_BUILDING: mainScreen.getBuildingGroup().addActor(this);

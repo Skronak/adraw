@@ -100,6 +100,9 @@ public class IconMovableListener extends InputListener {
         hud.getPlayScreen().getShadowImg().setVisible(true);
         hud.getPlayScreen().getShadowImg().setSize(parentActor.getWidth(),parentActor.getHeight());
         hud.getPlayScreen().getShadowImg().setPosition(deltaX,Constants.GROUND_HEIGHT);
+
+        actorStagePos = hud.getPlayScreen().getStage().screenToStageCoordinates(new Vector2(parentActor.getX(), parentActor.getY()));
+        hud.getPlayScreen().getShadowImg().setPosition(actorStagePos.x, Constants.GROUND_HEIGHT);
     }
 
     /**
@@ -114,8 +117,8 @@ public class IconMovableListener extends InputListener {
     public void drag(InputEvent event, float x, float y, int pointer) {
         actorStagePos = hud.getPlayScreen().getStage().screenToStageCoordinates(new Vector2(parentActor.getX(), parentActor.getY()));
         this.parentActor.moveBy(x - this.parentActor.getWidth() / 2, y - this.parentActor.getHeight() / 2);
-
-        hud.getPlayScreen().getShadowImg().setPosition(actorStagePos.x, Constants.GROUND_HEIGHT);
+        hud.getPlayScreen().getShadowImg().moveBy(x - this.parentActor.getWidth() / 2, 0);
+//        hud.getPlayScreen().getShadowImg().setPosition(actorStagePos.x, Constants.GROUND_HEIGHT);
     }
 
     /**
